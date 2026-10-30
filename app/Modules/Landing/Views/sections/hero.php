@@ -1,9 +1,9 @@
-<?php /* Banner principal: arte oficial (spp/banner_p.jpg). En móvil se muestra el recorte con el título y los aliados van debajo. */ ?>
+<?php /* Banner principal. Escritorio: spp/banner_p.jpg · Celular: spp/banner_p_m.jpg (versión vertical, ya incluye a los aliados). */ ?>
 <section id="inicio" class="mx-3 my-12 lg:mx-5 lg:my-16" aria-label="LV Congreso Nacional de Pediatría, Edición Esmeralda">
     <div class="overflow-hidden rounded-[30px] bg-white shadow-sm ring-1 ring-esm-100">
         <h1 class="sr-only"><?= esc($c->nombre) ?> · <?= esc($c->edicion) ?> 55° · <?= esc($c->lema) ?></h1>
         <picture>
-            <source media="(max-width: 767px)" srcset="<?= base_url('img/banner-movil.webp') ?>" width="900" height="546">
+            <source media="(max-width: 767px)" srcset="<?= base_url('img/banner-movil.webp') ?>" width="1000" height="1200">
             <img src="<?= base_url('img/banner-principal.webp') ?>" width="2400" height="875" fetchpriority="high" decoding="async"
                 alt="LV Congreso Nacional de Pediatría, Edición Esmeralda 55°. Dra. Ivonne Abadía de Regalado. Protegiendo el futuro con ciencia sin fronteras. Aliados estratégicos: Baby Castille, SENACYT, Fundación Despega Copa Airlines y Vive Emergencias y Traslados."
                 class="block h-auto w-full">
@@ -29,12 +29,5 @@
                 <a href="#internacionales" class="rounded-full border-2 border-esm-900 px-[24px] py-[14px] font-semibold transition hover:bg-esm-900 hover:text-white">Internacionales</a>
             </div>
         </div>
-    </div>
-
-    <?php /* Solo móvil: el recorte del banner no incluye los logos, se muestran aquí */ ?>
-    <div class="mt-4 overflow-hidden rounded-[30px] bg-white ring-1 ring-esm-100 md:hidden">
-        <img src="<?= base_url('img/banner-aliados.webp') ?>" width="1000" height="875" loading="lazy" decoding="async"
-            alt="Aliados estratégicos: Baby Castille, SENACYT, Fundación Despega Copa Airlines, Vive. Apoyan: Opella, OM Pharma, Raven, Exeltis, Nicklaus Children's Global Health, Respirator, Mivo, Lucera, NeilMed, Cevaxin, Newport, Histagrip, Altos del María, ABC Pediatrics, FOPA, Designers Pop Up Shop y ELS."
-            class="block h-auto w-full">
     </div>
 </section>

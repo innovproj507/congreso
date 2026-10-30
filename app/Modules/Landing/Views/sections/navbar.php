@@ -1,20 +1,16 @@
 <?php /* Encabezado de la página (sin menú: la página se recorre hacia abajo).
- * Izquierda: logo de la Sociedad · Centro: nombre del congreso · Derecha: logo de Baby Castille. */ ?>
+ * Logo de la Sociedad + nombre del congreso. Celular: apilados y centrados; escritorio: lado a lado con una línea divisoria. */ ?>
 <header id="encabezado" class="border-b border-esm-100 bg-white">
-    <div class="mx-auto flex max-w-[1320px] flex-wrap items-center justify-between gap-x-6 gap-y-3 px-5 py-4 lg:py-5">
+    <div class="mx-auto flex max-w-[1320px] flex-col items-center gap-3 px-5 py-5 text-center lg:flex-row lg:justify-center lg:gap-8 lg:py-6 lg:text-left">
         <a href="<?= base_url() ?>" class="shrink-0" aria-label="Sociedad Panameña de Pediatría, ir al inicio">
-            <img src="<?= base_url('img/logo.webp') ?>" width="394" height="78" decoding="async" alt="Sociedad Panameña de Pediatría" class="h-10 w-auto sm:h-12 lg:h-14">
+            <img src="<?= base_url('img/logo.webp') ?>" width="394" height="78" decoding="async" alt="Sociedad Panameña de Pediatría" class="h-14 w-auto sm:h-16 lg:h-20">
         </a>
 
-        <div class="order-last w-full text-center sm:order-none sm:w-auto sm:flex-1">
-            <p class="font-display text-base font-bold leading-tight text-esm-900 sm:text-lg lg:text-2xl"><?= esc($c->nombre) ?></p>
-            <p class="font-display text-sm font-bold uppercase tracking-wide text-esm-700 sm:text-base lg:text-lg"><?= esc($c->edicion) ?> <span class="text-esm-900">55°</span></p>
-            <p class="mt-0.5 text-xs text-ink/70 sm:text-sm"><?= esc($c->fechaTexto) ?> · <?= esc($c->sede) ?></p>
+        <div class="lg:border-l-2 lg:border-esm-100 lg:pl-8">
+            <p class="font-display text-xl font-bold leading-tight text-esm-900 sm:text-2xl lg:text-3xl xl:text-4xl"><?= esc($c->nombre) ?></p>
+            <p class="font-display mt-1 text-base font-bold uppercase tracking-wide text-esm-700 sm:text-lg lg:text-xl xl:text-2xl"><?= esc($c->edicion) ?> <span class="text-esm-900">55°</span></p>
+            <p class="mt-1 text-sm text-ink/70 sm:text-base lg:text-lg"><?= esc($c->fechaTexto) ?> · <?= esc($c->sede) ?></p>
         </div>
-
-        <span class="shrink-0">
-            <img src="<?= base_url('img/logo-babycastille.webp') ?>" width="326" height="291" decoding="async" alt="Baby Castille" class="h-12 w-auto sm:h-14 lg:h-16">
-        </span>
     </div>
 </header>
 

@@ -75,6 +75,19 @@ Código: `app/Modules/Landing/Services/GaleriaService.php`, comando `Commands/Ga
 
 ## Encabezado sin menú (página de desplazamiento)
 
-La landing es de **desplazamiento continuo, sin menú de navegación** (como el sitio de referencia del cliente): arriba solo va un encabezado con el logo de la Sociedad (izquierda), el nombre del congreso con fecha y sede (centro) y el logo de Baby Castille (derecha). Vive en `Views/sections/navbar.php`. Al bajar aparece un botón flotante «Inscríbete» que lleva al formulario y se oculta cuando ya se ven las inscripciones.
+La landing es de **desplazamiento continuo, sin menú de navegación** (como el sitio de referencia del cliente): arriba solo va un encabezado con el logo de la Sociedad y el nombre del congreso con fecha y sede (en celular apilados y centrados; en escritorio lado a lado, con una línea divisoria). Vive en `Views/sections/navbar.php`. Al bajar aparece un botón flotante «Inscríbete» que lleva al formulario y se oculta cuando ya se ven las inscripciones.
 
 Si el cliente quiere menú de nuevo, el listado de secciones sigue en `Config/Congreso.php` (`$menu`, que también alimenta los «Enlaces rápidos» del pie) y bastaría reponer la barra en `navbar.php`.
+
+## Imágenes de la carpeta `spp/`: versión de escritorio y de celular
+
+Cada pieza tiene dos archivos en `spp/`: el de escritorio y el de celular (terminado en `_m`). Los originales no se publican: se convierten a WebP en `public/img/` (script de apoyo `imagenes_pc_movil.py` descrito abajo) y la página elige uno u otro con `<picture>` (celular = pantallas de hasta 767 px).
+
+| Pieza | Escritorio | Celular | Salidas en `public/img/` |
+|---|---|---|---|
+| Banner principal | `banner_p.jpg` | `banner_p_m.jpg` | `banner-principal.webp` · `banner-movil.webp` |
+| Carta de bienvenida | `carta.jpg` | `carta_m.jpg` | `carta-bienvenida.webp` · `carta-bienvenida-movil.webp` |
+| Inscripciones | `incripciones.jpg` | `incripciones_m.jpg` | `inscripciones.webp` · `inscripciones-movil.webp` |
+| Grand Tours | `grand_tours.jpg` | `grand_tours_m.jpg` | `grandtours-banner.webp` · `grandtours-banner-movil.webp` |
+
+Para cambiar una imagen: reemplaza el archivo en `spp/` (mismo nombre) y vuelve a generar el WebP (escritorio 2000–2400 px de ancho, celular 1000 px, calidad 84). La carta y las tarifas también existen como texto (botón «Leer la carta como texto» / «Ver tarifas como texto» en celular, y para lectores de pantalla en escritorio). Si cambias precios, actualiza también `TarifasOficiales.php`.
