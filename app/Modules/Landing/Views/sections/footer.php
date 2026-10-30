@@ -2,7 +2,7 @@
     <div class="mx-auto grid max-w-[1320px] gap-10 px-5 md:grid-cols-3">
         <div>
             <img src="<?= base_url('img/logo.webp') ?>" alt="Sociedad Panameña de Pediatría" class="h-14 w-auto rounded-xl bg-white p-2">
-            <p class="mt-4 text-sm">Protegiendo el futuro con ciencia sin fronteras.</p>
+            <p class="mt-4 text-sm">Protegiendo el futuro con ciencia. Sin fronteras.</p>
         </div>
         <div>
             <h4 class="font-display mb-4 text-lg font-bold text-white">Enlaces rápidos</h4>
