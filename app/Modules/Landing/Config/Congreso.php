@@ -34,6 +34,8 @@ class Congreso extends BaseConfig
     public array $incluye = [
         'Conferencias magistrales durante 3 días, de 9:00 a. m. a 4:00 p. m. aproximadamente',
         '1 almuerzo tipo “box lunch” diario',
+        'Acceso directo a los conferencistas nacionales e internacionales',
+        'Oportunidad de interactuar con las marcas participantes en la Expo Médica',
     ];
 
     /** @var list<string> */

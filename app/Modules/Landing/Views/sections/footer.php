@@ -1,5 +1,5 @@
 <footer class="bg-esm-900 pt-16 text-esm-100">
-    <div class="mx-auto grid max-w-[1320px] gap-10 px-5 md:grid-cols-4">
+    <div class="mx-auto grid max-w-[1320px] gap-10 px-5 md:grid-cols-3">
         <div>
             <img src="<?= base_url('img/logo.webp') ?>" alt="Sociedad Panameña de Pediatría" class="h-14 w-auto rounded-xl bg-white p-2">
             <p class="mt-4 text-sm">Protegiendo el futuro con ciencia sin fronteras.</p>
@@ -9,12 +9,6 @@
             <ul class="space-y-2 text-sm">
                 <?php foreach ($c->menu as $m) : ?><li><a href="#<?= esc($m['id'], 'attr') ?>" class="hover:text-gold"><?= esc($m['label']) ?></a></li><?php endforeach; ?>
             </ul>
-        </div>
-        <div>
-            <h4 class="font-display mb-4 text-lg font-bold text-white">Aliados</h4>
-            <div class="flex flex-wrap items-center gap-3">
-                <span class="rounded-xl bg-white px-3 py-1.5"><img src="<?= base_url('img/logo-babycastille.webp') ?>" width="326" height="291" loading="lazy" alt="Baby Castille" class="h-11 w-auto"></span>
-            </div>
         </div>
         <div>
             <h4 class="font-display mb-4 text-lg font-bold text-white">Contacto</h4>
