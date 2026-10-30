@@ -62,7 +62,7 @@ ob_start();
         </details>
         <div class="hidden md:block md:sr-only"><?= $textoTarifas ?></div>
 
-        <div class="mt-8 grid gap-6 md:grid-cols-3">
+        <div class="mt-8 grid gap-6 md:grid-cols-2">
             <div class="reveal rounded-[30px] bg-white p-7 shadow-sm">
                 <h3 class="font-display flex items-center gap-2 text-xl font-bold text-esm-800"><?= icono('circle-check', 20) ?> ¿Qué incluye?</h3>
                 <ul class="mt-4 space-y-3 text-ink/80">
@@ -78,13 +78,6 @@ ob_start();
                         <span class="rounded-full bg-esm-100 px-4 py-1.5 text-sm font-semibold text-esm-800"><?= esc($f) ?></span>
                     <?php endforeach; ?>
                 </div>
-            </div>
-            <div class="reveal rounded-[30px] bg-white p-7 shadow-sm" style="transition-delay:.2s">
-                <h3 class="font-display flex items-center gap-2 text-xl font-bold text-esm-800"><?= icono('mail', 20) ?> ¿Cómo inscribirme?</h3>
-                <ol class="mt-4 list-inside list-decimal space-y-2 text-ink/80">
-                    <?php foreach ($c->pasosInscripcion as $p) : ?><li><?= esc($p) ?></li><?php endforeach; ?>
-                </ol>
-                <a href="mailto:<?= esc($c->correo, 'attr') ?>" class="mt-4 block break-all text-sm font-semibold text-esm-700 underline"><?= esc($c->correo) ?></a>
             </div>
         </div>
     </div>
