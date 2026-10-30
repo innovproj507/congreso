@@ -15,6 +15,9 @@ $aliados = [
     ['img/logo-lucera.webp', 530, 158, 'Lucera', null, 'h-[34px] sm:h-[52px]'],
     ['img/logo-neilmed.webp', 513, 95, 'NeilMed', null, 'h-[26px] sm:h-[40px]'],
     ['img/logo-newport.webp', 526, 164, 'Newport Pharmaceuticals International', null, 'h-[36px] sm:h-[56px]'],
+    ['img/logo-exceltis.webp', 470, 204, 'Exeltis', null, 'h-[40px] sm:h-[62px]'],
+    ['img/logo-pediatrics.webp', 239, 225, 'ABC Pediatrics · Clínica de Especialidades Pediátricas', null, 'h-[44px] sm:h-[68px]'],
+    ['img/logo-respirator.webp', 498, 149, 'Respirator Care Panamá', null, 'h-[34px] sm:h-[52px]'],
 ]; // [archivo, ancho, alto, nombre, enlace (o null), clase de altura]
 ?>
 <section class="overflow-hidden border-y border-esm-100 bg-white py-10" aria-label="Apoyan">
