@@ -478,4 +478,14 @@
         .then(function () { b.disabled = false; });
     });
   }
+
+  // ---- Internacionales: el botón del banner abre el panel con las dos opciones (estadía / inscripción)
+  var interAbrir = $('#inter-abrir'), interPanel = $('#inter-opciones');
+  if (interAbrir && interPanel && typeof interPanel.showModal === 'function') {
+    interAbrir.addEventListener('click', function () { interPanel.showModal(); });
+    interPanel.addEventListener('click', function (e) {
+      // clic fuera del cuadro (en el fondo) o en un elemento con data-cerrar
+      if (e.target === interPanel || e.target.closest('[data-cerrar]')) interPanel.close();
+    });
+  }
 })();
