@@ -1,4 +1,4 @@
-<footer class="bg-esm-900 pt-16 text-esm-100">
+<footer class="bg-[#056a53] pt-16 text-white/90">
     <div class="mx-auto grid max-w-[1320px] gap-10 px-5 md:grid-cols-3">
         <div>
             <img src="<?= base_url('img/logo.webp') ?>" alt="Sociedad Panameña de Pediatría" class="h-14 w-auto rounded-xl bg-white p-2">
@@ -19,5 +19,5 @@
             </ul>
         </div>
     </div>
-    <div class="mt-12 border-t border-white/10 py-5 text-center text-xs text-white/50">© 2027 Sociedad Panameña de Pediatría · <?= esc($c->nombre) ?> · <?= esc($c->edicion) ?></div>
+    <div class="mt-12 border-t border-white/20 py-5 text-center text-xs text-white/70">© 2027 Sociedad Panameña de Pediatría · <?= esc($c->nombre) ?> · <?= esc($c->edicion) ?></div>
 </footer>

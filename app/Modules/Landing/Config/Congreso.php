@@ -33,7 +33,6 @@ class Congreso extends BaseConfig
     /** @var list<string> */
     public array $incluye = [
         'Conferencias magistrales durante 3 días, de 9:00 a. m. a 4:00 p. m. aproximadamente',
-        '1 almuerzo tipo “box lunch” diario',
         'Acceso directo a los conferencistas nacionales e internacionales',
         'Oportunidad de interactuar con las marcas participantes en la Expo Médica',
     ];
@@ -63,7 +62,7 @@ class Congreso extends BaseConfig
     /** @var list<array{q:string,a:string}> */
     public array $faqs = [
         ['q' => '¿Cuándo y dónde se realiza el congreso?', 'a' => 'Del 17 al 19 de junio de 2027, en el Megapolis Convention Center.'],
-        ['q' => '¿Qué incluye la inscripción?', 'a' => 'Conferencias magistrales durante 3 días, de 9:00 a. m. a 4:00 p. m. aproximadamente, y 1 almuerzo tipo “box lunch” diario.'],
+        ['q' => '¿Qué incluye la inscripción?', 'a' => 'Conferencias magistrales durante 3 días, de 9:00 a. m. a 4:00 p. m. aproximadamente, acceso directo a los conferencistas nacionales e internacionales y la oportunidad de interactuar con las marcas participantes en la Expo Médica.'],
         ['q' => '¿Cómo puedo pagar?', 'a' => 'Yappy, Visa, Mastercard, Clave y ACH Banco Nacional.'],
         ['q' => '¿Hasta cuándo aplica la preventa?', 'a' => 'Las tarifas de preventa rigen del 30 de octubre de 2026 al 15 de marzo de 2027. Luego aplican las tarifas regulares.'],
         ['q' => 'Soy participante internacional, ¿cómo reservo?', 'a' => 'A través de Grand Tours, que gestiona hoteles, tiquetes aéreos y traslados, con paquetes que incluyen la inscripción. Aplica para visitantes del extranjero.'],

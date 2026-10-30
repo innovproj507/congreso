@@ -70,18 +70,6 @@
     arte.style.transition = 'transform .25s ease-out, opacity .6s ease';
   }
 
-  // ---- Save the date
-  var std = $('#std'), KEY = 'std-2027-visto';
-  function cerrarStd() { std.classList.add('hidden'); std.classList.remove('flex'); try { sessionStorage.setItem(KEY, '1'); } catch (e) {} }
-  if (std) {
-    var visto = false; try { visto = !!sessionStorage.getItem(KEY); } catch (e) {}
-    if (!visto) setTimeout(function () { std.classList.remove('hidden'); std.classList.add('flex'); }, 600);
-    $('#std-cerrar').addEventListener('click', cerrarStd);
-    std.addEventListener('click', function (e) { if (e.target === std) cerrarStd(); });
-    $('#std-ir').addEventListener('click', cerrarStd);
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !std.classList.contains('hidden')) cerrarStd(); });
-  }
-
   // ---- Galería dinámica: Visor animado (crossfade + Ken Burns) + Mosaico filtrable + Lightbox
   var lb = $('#lightbox');
   if (lb) {

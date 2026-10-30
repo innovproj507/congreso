@@ -91,3 +91,4 @@ Cada pieza tiene dos archivos en `spp/`: el de escritorio y el de celular (termi
 | Grand Tours | `grand_tours.jpg` | `grand_tours_m.jpg` | `grandtours-banner.webp` · `grandtours-banner-movil.webp` |
 
 Para cambiar una imagen: reemplaza el archivo en `spp/` (mismo nombre) y vuelve a generar el WebP (escritorio 2000–2400 px de ancho, celular 1000 px, calidad 84). La carta y las tarifas también existen como texto (botón «Leer la carta como texto» / «Ver tarifas como texto» en celular, y para lectores de pantalla en escritorio). Si cambias precios, actualiza también `TarifasOficiales.php`.
+

@@ -62,7 +62,6 @@ $datos = [
 </head>
 <body>
 <a href="#contenido" class="skip-link">Saltar al contenido</a>
-<?= $this->include('Modules\Landing\Views\sections\savethedate') ?>
 <?= $this->include('Modules\Landing\Views\sections\navbar') ?>
 <main id="contenido">
     <?= $this->include('Modules\Landing\Views\sections\galeria') ?>

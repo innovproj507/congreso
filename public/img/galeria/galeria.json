@@ -1,6 +1,6 @@
 {
-    "firma": "9457d4c2a0c2064d982121d6701e7f76b1adc583",
-    "generado": "2026-10-29T15:46:45-05:00",
+    "firma": "ab9ce928dbd4393178da2d814bbef3f58e3edd36",
+    "generado": "2026-10-30T08:26:47-05:00",
     "fotos": [
         {
             "id": 1,
@@ -112,8 +112,8 @@
         },
         {
             "id": 13,
-            "src": "img/galeria/g-55d3e09ab0.webp",
-            "thumb": "img/galeria/g-55d3e09ab0-t.webp",
+            "src": "img/galeria/g-b16d9b9067.webp",
+            "thumb": "img/galeria/g-b16d9b9067-t.webp",
             "width": 960,
             "height": 1280,
             "alt": "Fotografía 13 del Congreso Nacional de Pediatría 2026",
@@ -121,8 +121,8 @@
         },
         {
             "id": 14,
-            "src": "img/galeria/g-b16d9b9067.webp",
-            "thumb": "img/galeria/g-b16d9b9067-t.webp",
+            "src": "img/galeria/g-215d2ef36c.webp",
+            "thumb": "img/galeria/g-215d2ef36c-t.webp",
             "width": 960,
             "height": 1280,
             "alt": "Fotografía 14 del Congreso Nacional de Pediatría 2026",
@@ -130,17 +130,17 @@
         },
         {
             "id": 15,
-            "src": "img/galeria/g-215d2ef36c.webp",
-            "thumb": "img/galeria/g-215d2ef36c-t.webp",
-            "width": 960,
-            "height": 1280,
+            "src": "img/galeria/g-64e6821c26.webp",
+            "thumb": "img/galeria/g-64e6821c26-t.webp",
+            "width": 1280,
+            "height": 960,
             "alt": "Fotografía 15 del Congreso Nacional de Pediatría 2026",
             "titulo": ""
         },
         {
             "id": 16,
-            "src": "img/galeria/g-64e6821c26.webp",
-            "thumb": "img/galeria/g-64e6821c26-t.webp",
+            "src": "img/galeria/g-e6acdf5e6a.webp",
+            "thumb": "img/galeria/g-e6acdf5e6a-t.webp",
             "width": 1280,
             "height": 960,
             "alt": "Fotografía 16 del Congreso Nacional de Pediatría 2026",
@@ -148,29 +148,20 @@
         },
         {
             "id": 17,
-            "src": "img/galeria/g-e6acdf5e6a.webp",
-            "thumb": "img/galeria/g-e6acdf5e6a-t.webp",
-            "width": 1280,
-            "height": 960,
+            "src": "img/galeria/g-3f6705f780.webp",
+            "thumb": "img/galeria/g-3f6705f780-t.webp",
+            "width": 963,
+            "height": 1280,
             "alt": "Fotografía 17 del Congreso Nacional de Pediatría 2026",
             "titulo": ""
         },
         {
             "id": 18,
-            "src": "img/galeria/g-3f6705f780.webp",
-            "thumb": "img/galeria/g-3f6705f780-t.webp",
-            "width": 963,
-            "height": 1280,
-            "alt": "Fotografía 18 del Congreso Nacional de Pediatría 2026",
-            "titulo": ""
-        },
-        {
-            "id": 19,
             "src": "img/galeria/g-54e335b6d8.webp",
             "thumb": "img/galeria/g-54e335b6d8-t.webp",
             "width": 963,
             "height": 1280,
-            "alt": "Fotografía 19 del Congreso Nacional de Pediatría 2026",
+            "alt": "Fotografía 18 del Congreso Nacional de Pediatría 2026",
             "titulo": ""
         }
     ],
