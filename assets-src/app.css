@@ -1,0 +1,143 @@
+@import "tailwindcss";
+@source "../app/Modules/**/*.php";
+@source "../public/assets/js/landing.js";
+
+:root {
+  /* Paleta tomada del arte oficial: azul marino, verde esmeralda/teal, celestes */
+  --esm-900: #0a2a5c; /* azul marino */
+  --esm-800: #0e6b5c; /* verde esmeralda */
+  --esm-700: #12866f;
+  --esm-500: #1fa88c;
+  --esm-300: #8fd3e8; /* celeste */
+  --esm-100: #dbeaf7;
+  --esm-50: #eef6fc;
+  --gold: #5fd0b8; /* acento menta (antes dorado) */
+  --ink: #12294a;
+}
+
+@theme inline {
+  --color-esm-900: var(--esm-900);
+  --color-esm-800: var(--esm-800);
+  --color-esm-700: var(--esm-700);
+  --color-esm-500: var(--esm-500);
+  --color-esm-300: var(--esm-300);
+  --color-esm-100: var(--esm-100);
+  --color-esm-50: var(--esm-50);
+  --color-gold: var(--gold);
+  --color-ink: var(--ink);
+  --font-sans: "DM Sans", system-ui, sans-serif;
+  --font-display: "Ubuntu", Georgia, serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 1rem;
+}
+
+body {
+  background: #fff;
+  color: var(--ink);
+  font-family: "DM Sans", system-ui, sans-serif;
+}
+
+.font-display {
+  font-family: "Ubuntu", Georgia, serif;
+}
+
+/* Fondo esmeralda con textura de rombos (facetas de gema) */
+.bg-gem {
+  background-color: var(--esm-900);
+  background-image:
+    radial-gradient(circle at 20% 10%, rgba(31, 168, 140, 0.35), transparent 45%),
+    radial-gradient(circle at 85% 90%, rgba(143, 211, 232, 0.2), transparent 40%),
+    linear-gradient(45deg, rgba(255, 255, 255, 0.04) 25%, transparent 25%, transparent 75%, rgba(255, 255, 255, 0.04) 75%),
+    linear-gradient(-45deg, rgba(255, 255, 255, 0.04) 25%, transparent 25%, transparent 75%, rgba(255, 255, 255, 0.04) 75%);
+  background-size: auto, auto, 56px 56px, 56px 56px;
+}
+
+.bg-placeholder {
+  background: linear-gradient(135deg, var(--esm-100), var(--esm-300) 55%, var(--esm-500));
+}
+
+/* Accesibilidad: foco visible y enlace para saltar la navegación */
+:focus-visible {
+  outline: 3px solid var(--esm-500);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+.skip-link {
+  position: fixed;
+  left: 1rem;
+  top: -4rem;
+  z-index: 200;
+  background: var(--esm-900);
+  color: #fff;
+  padding: 0.75rem 1.25rem;
+  border-radius: 999px;
+  font-weight: 600;
+  transition: top 0.2s;
+}
+.skip-link:focus { top: 1rem; outline-color: #fff; }
+
+/* Mensaje de error junto a cada campo */
+.campo-msg { margin-top: .25rem; font-size: .875rem; font-weight: 500; color: #b91c1c; }
+
+/* Campo con error de validación */
+.campo-error { border-color: #dc2626 !important; box-shadow: 0 0 0 3px rgb(220 38 38 / 0.15); }
+
+/* Aparición al desplazarse (reemplaza framer-motion) */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Pestañas */
+.tab-pill { background: #fff; color: var(--esm-900); }
+.tab-pill.is-on { background: var(--esm-800); color: #fff; }
+.exp-tab { background: rgb(255 255 255 / 0.1); }
+.exp-tab:hover { background: rgb(255 255 255 / 0.2); }
+.exp-tab.is-on { background: var(--esm-800); }
+.tarifa-tab { color: var(--esm-800); }
+.tarifa-tab:hover { background: var(--esm-50); }
+.tarifa-tab.is-on { background: var(--esm-800); color: #fff; }
+.pago-pill.is-on { background: var(--esm-800); border-color: var(--esm-800); color: #fff; }
+
+.vista-btn { color: var(--esm-900); }
+.vista-btn:hover { color: var(--esm-700); }
+.vista-btn.is-on { background: var(--esm-800); color: #fff; }
+
+.marquee { animation: marquee 28s linear infinite; }
+@keyframes marquee { to { transform: translateX(-50%); } }
+
+/* Escenario principal de la galería: fundido suave + efecto Ken Burns */
+.visor-capa {
+  opacity: 0;
+  transform: scale(1);
+  transition: opacity 0.85s ease-in-out, transform 5s ease-out;
+  will-change: opacity, transform;
+}
+.visor-capa.is-activa {
+  opacity: 1;
+  transform: scale(1.06);
+}
+.galeria-item.is-activa {
+  box-shadow: 0 0 0 3px var(--esm-700);
+}
+.lb-thumb.is-on {
+  opacity: 1;
+  box-shadow: 0 0 0 2px var(--gold);
+}
+
+.gem-float { animation: flota 6s ease-in-out infinite; transform-origin: center; }
+@keyframes flota { 50% { transform: translateY(-12px); } }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .marquee, .gem-float { animation: none; }
+}

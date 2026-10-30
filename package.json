@@ -1,0 +1,14 @@
+{
+  "name": "congreso",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Landing y registro de participantes del LV Congreso Nacional de Pediatría 2027 (CodeIgniter 4). Solo se usa npm para compilar Tailwind.",
+  "scripts": {
+    "build:css": "tailwindcss -i assets-src/app.css -o public/assets/css/app.css --minify",
+    "watch:css": "tailwindcss -i assets-src/app.css -o public/assets/css/app.css --watch"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.3",
+    "tailwindcss": "^4.3.3"
+  }
+}
