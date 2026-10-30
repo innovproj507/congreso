@@ -55,6 +55,9 @@ body {
   background-size: auto, auto, 56px 56px, 56px 56px;
 }
 
+/* Degradado verde institucional (derecha #066044 → izquierda #009d92): pie de página y «Contáctanos» */
+.fondo-degradado { background: linear-gradient(to left, #066044, #009d92); }
+
 .bg-placeholder {
   background: linear-gradient(135deg, var(--esm-100), var(--esm-300) 55%, var(--esm-500));
 }

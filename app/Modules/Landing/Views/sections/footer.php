@@ -1,4 +1,4 @@
-<footer class="bg-[#056a53] pt-16 text-white/90">
+<footer class="fondo-degradado pt-16 text-white/90">
     <div class="mx-auto grid max-w-[1320px] gap-10 px-5 md:grid-cols-3">
         <div>
             <img src="<?= base_url('img/logo.webp') ?>" alt="Sociedad Panameña de Pediatría" class="h-14 w-auto rounded-xl bg-white p-2">

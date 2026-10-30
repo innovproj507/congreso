@@ -16,8 +16,8 @@ if (! function_exists('seccion_inicio')) {
     // Medidas de Fexo: sección 120px, sub-título 20px uppercase bold, h2 52px/500
     function seccion_inicio(string $id, string $eyebrow, string $titulo, bool $dark = false, bool $tint = false): string
     {
-        $bg   = $dark ? 'bg-gem text-white' : ($tint ? 'bg-esm-50' : 'bg-white');
-        $ey   = $dark ? 'text-esm-300' : 'text-esm-700';
+        $bg   = $dark ? 'fondo-degradado text-white' : ($tint ? 'bg-esm-50' : 'bg-white');
+        $ey   = $dark ? 'text-white/80' : 'text-esm-700';
 
         return '<section id="' . esc($id, 'attr') . '" class="py-20 lg:py-[120px] ' . $bg . '"><div class="mx-auto max-w-[1320px] px-5">'
             . '<div class="reveal mb-12 text-center lg:mb-14"><p class="font-display text-base font-bold uppercase leading-none sm:text-xl ' . $ey . '">' . esc($eyebrow) . '</p>'
