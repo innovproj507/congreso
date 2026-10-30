@@ -20,6 +20,11 @@ class Congreso extends BaseConfig
     /** Enlace de reservas de Grand Tours. Se puede cambiar en .env: congreso.grandToursUrl = 'https://...'. Vacío = el botón se muestra como «próximamente». */
     public string $grandToursUrl = 'https://dmc.grandtours.com.pa/congreso-pediatria';
 
+    /** Datos para pagos por ACH y Yappy. Se pueden cambiar en .env: congreso.bancoCuenta = '...' */
+    public string $bancoBeneficiario = 'Sociedad Panameña de Pediatría';
+    public string $bancoNombre = 'Banco Nacional de Panamá';
+    public string $bancoCuenta = '10000354366';
+
     /** @var list<array{id:string,label:string}> */
     public array $menu = [
         ['id' => 'revive', 'label' => 'Revive 2026'],

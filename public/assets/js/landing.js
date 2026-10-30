@@ -319,6 +319,17 @@
     });
   }
 
+  function enviarForm(url, fd, senal) {
+    return fetch(url, {
+      method: 'POST',
+      headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrf, 'X-Requested-With': 'XMLHttpRequest' },
+      body: fd, credentials: 'same-origin', signal: senal || undefined
+    }).then(function (res) {
+      return res.json().catch(function () { return { ok: false, error: 'La sesión expiró. Recarga la página e inténtalo de nuevo.' }; })
+        .then(function (j) { if (j && j.csrf) csrf = j.csrf; j.status = res.status; return j; });
+    });
+  }
+
   // ---- Formulario de inscripción
   var form = $('#registro-form');
   if (form) {
@@ -339,15 +350,105 @@
     }
     pais.addEventListener('input', pintarExtranjero); pintarExtranjero();
 
-    // Medio de pago: se marca el elegido y se muestran sus instrucciones antes de enviar
-    var radios = $$('input[name=pago]', form), cajaPago = $('#pago-instrucciones');
-    function pintarPagos() {
-      var elegido = '';
-      radios.forEach(function (r) { r.parentNode.classList.toggle('is-on', r.checked); if (r.checked) elegido = r.value; });
-      var t = (datos.instrucciones || {})[elegido] || '';
-      if (cajaPago) { cajaPago.textContent = t; cajaPago.classList.toggle('hidden', !t); }
+    // Medio de pago: tarjetas (ACH, Yappy, tarjeta) y un panel que cambia según el elegido
+    var PAGOS = {
+      ach: { titulo: 'Transferencia Bancaria ACH', icono: '🏦', color: '#1e3a8a', nota: 'Realiza la transferencia y adjunta el comprobante a continuación.' },
+      yappy: { titulo: 'Pago con Yappy', icono: '📱', color: '#059669', nota: 'Después de pagar con Yappy, adjunta la captura de pantalla del comprobante.' },
+      tarjeta: { titulo: 'Tarjeta de Crédito', icono: '💳', color: '#7c3aed', nota: 'Ingresa los datos de tu tarjeta en el formulario seguro a continuación.' }
+    };
+    var tarjetasPago = $$('.pago-card', form), metodo = '', tokenTarjeta = '';
+    var zona = $('#zona-comprobante'), inputArchivo = form.elements.comprobante;
+    var ZONA_VACIA = '<div style="font-size:2.2rem;margin-bottom:.5rem">📎</div><p style="color:#374151;font-weight:600;font-size:.875rem;margin:0 0 .25rem">Arrastra aquí o haz clic para seleccionar</p><p style="color:#9ca3af;font-size:.75rem;margin:0">JPG, PNG, WebP o PDF — máximo 10 MB</p>';
+    function pintarArchivo() {
+      var a = inputArchivo.files && inputArchivo.files[0];
+      zona.style.borderStyle = a ? 'solid' : 'dashed'; zona.style.borderColor = a ? '#10b981' : '#d1d5db'; zona.style.background = a ? '#f0fdf4' : '#fafafa';
+      if (!a) { zona.innerHTML = ZONA_VACIA; return; }
+      zona.innerHTML = '<div style="font-size:2.2rem;margin-bottom:.5rem"></div><p style="color:#065f46;font-weight:700;font-size:.875rem;margin:0 0 .25rem"></p><p style="color:#6b7280;font-size:.75rem;margin:0"><span></span> — <button type="button" style="color:#dc2626;text-decoration:underline">Eliminar</button></p>';
+      zona.children[0].textContent = a.type === 'application/pdf' ? '📄' : '🖼️';
+      zona.children[1].textContent = '✅ ' + a.name;
+      zona.children[2].firstChild.textContent = (a.size / 1024 / 1024).toFixed(2) + ' MB';
+      zona.querySelector('button').addEventListener('click', function (e) { e.stopPropagation(); inputArchivo.value = ''; pintarArchivo(); marcar('comprobante', ''); });
     }
-    radios.forEach(function (r) { r.addEventListener('change', pintarPagos); }); pintarPagos();
+    function elegirArchivo(a) {
+      if (!a) return;
+      var dt = new DataTransfer(); dt.items.add(a); inputArchivo.files = dt.files; pintarArchivo(); validarComprobante();
+    }
+    zona.addEventListener('click', function () { inputArchivo.click(); });
+    zona.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); inputArchivo.click(); } });
+    zona.addEventListener('dragover', function (e) { e.preventDefault(); zona.classList.add('arrastrando'); });
+    zona.addEventListener('dragleave', function () { zona.classList.remove('arrastrando'); });
+    zona.addEventListener('drop', function (e) { e.preventDefault(); zona.classList.remove('arrastrando'); elegirArchivo(e.dataTransfer.files[0]); });
+    inputArchivo.addEventListener('change', function () { pintarArchivo(); validarComprobante(); });
+    pintarArchivo();
+
+    // Widget de tarjeta del banco (CROEM): necesita jQuery, que solo se carga si la persona elige tarjeta
+    var cont = $('#creditcard-container'), estadoTarjeta = $('#tarjeta-estado'), cvvCaja = $('#cvv-caja');
+    function avisoTarjeta(ok, texto) {
+      estadoTarjeta.style.display = texto ? 'block' : 'none'; estadoTarjeta.textContent = texto || '';
+      estadoTarjeta.style.background = ok ? '#f0fdf4' : '#fef2f2'; estadoTarjeta.style.color = ok ? '#166534' : '#991b1b';
+    }
+    function sinToken() { tokenTarjeta = ''; form.elements.account_token.value = ''; cvvCaja.classList.add('hidden'); form.elements.cvv.value = ''; textoBoton(); }
+    function conJquery(fn) {
+      if (window.jQuery) return fn();
+      var sc = document.createElement('script'); sc.src = datos.jquery; sc.onload = fn;
+      sc.onerror = function () { cont.innerHTML = '<p style="padding:1.5rem;color:#991b1b;text-align:center">No se pudo cargar la pasarela de pago. Recarga la página.</p>'; };
+      document.head.appendChild(sc);
+    }
+    function cargarTarjeta() {
+      sinToken(); avisoTarjeta(false, '');
+      if (!datos.croem) { cont.innerHTML = '<p style="padding:1.5rem;color:#991b1b;text-align:center;font-weight:600">El pago con tarjeta no está disponible por ahora. Elige otro medio de pago.</p>'; return; }
+      cont.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;padding:3rem 1rem;gap:1rem;text-align:center"><div style="width:44px;height:44px;border:4px solid #e5e7eb;border-top-color:#1e3a8a;border-radius:50%;animation:pago-giro .8s linear infinite"></div><p style="color:#374151;font-weight:600;margin:0;font-size:.875rem">Cargando pasarela de pago segura…</p><p style="color:#9ca3af;font-size:.75rem;margin:0">Conexión cifrada • Banco Nacional de Panamá</p></div>';
+      window.SaveCreditCard_SuccessCallback = function (r) {
+        var t = r && r.TokenDetails && r.TokenDetails.AccountToken;
+        if (!t) { avisoTarjeta(false, '❌ No se pudo validar la tarjeta.'); sinToken(); return; }
+        tokenTarjeta = t; form.elements.account_token.value = t; marcar('account_token', '');
+        avisoTarjeta(true, '✅ Tarjeta validada — ingresa tu CVV para confirmar el pago'); cvvCaja.classList.remove('hidden'); form.elements.cvv.focus(); textoBoton();
+      };
+      window.SaveCreditCard_FailureCallback = function (r) { avisoTarjeta(false, '❌ Error: ' + ((r && r.ResponseDescription) || 'Error al validar la tarjeta')); sinToken(); };
+      window.SaveCreditCard_CancelCallback = function () { avisoTarjeta(false, ''); sinToken(); };
+      conJquery(function () {
+        window.jQuery.ajax({
+          type: 'GET', url: datos.croem.widget, data: { APIKey: datos.croem.apiKey, Token: '', Culture: 'es' },
+          success: function (html) { window.jQuery(cont).html(html); },
+          error: function () { cont.innerHTML = '<p style="padding:1.5rem;color:#991b1b;text-align:center">No se pudo conectar con la pasarela de pago segura. Elige otro medio o inténtalo más tarde.</p>'; }
+        });
+      });
+    }
+    function quitarTarjeta() {
+      if (window.jQuery) window.jQuery(cont).empty();
+      cont.innerHTML = ''; avisoTarjeta(false, ''); sinToken();
+      delete window.SaveCreditCard_SuccessCallback; delete window.SaveCreditCard_FailureCallback; delete window.SaveCreditCard_CancelCallback;
+    }
+
+    function textoBoton() {
+      var t = 'Enviar inscripción', cvv = form.elements.cvv.value;
+      if (metodo === 'tarjeta') t = !tokenTarjeta ? 'Valida tu tarjeta para continuar' : !/^[0-9]{3,4}$/.test(cvv) ? 'Ingresa el CVV para finalizar' : 'Pagar y completar inscripción 💳';
+      else if (metodo === 'ach' || metodo === 'yappy') t = 'Completar inscripción ✉️';
+      TEXTO_BOTON = t; if (!boton.disabled) txtBoton.textContent = t;
+    }
+    var TEXTO_BOTON = 'Enviar inscripción';
+    function pintarPagos() {
+      var info = PAGOS[metodo], det = $('#pago-detalle'), pide = metodo === 'ach' || metodo === 'yappy';
+      tarjetasPago.forEach(function (c) { c.classList.toggle('is-on', c.getAttribute('data-metodo') === metodo); });
+      det.classList.toggle('hidden', !info);
+      if (info) {
+        $('#pd-icono').textContent = info.icono; $('#pd-icono').style.background = info.color + '15';
+        $('#pd-titulo').textContent = info.titulo; $('#pd-sub').style.color = info.color;
+        var n = $('#pago-instrucciones'); n.textContent = info.nota; n.style.borderLeftColor = info.color;
+        $$('[data-detalle]', det).forEach(function (d) { d.classList.toggle('hidden', d.getAttribute('data-detalle') !== metodo); });
+      }
+      $('#bloque-comprobante').classList.toggle('hidden', !pide);
+      $('#bloque-tarjeta').classList.toggle('hidden', metodo !== 'tarjeta');
+      if (!pide) { inputArchivo.value = ''; pintarArchivo(); form.elements.referencia_pago.value = ''; marcar('comprobante', ''); marcar('referencia_pago', ''); }
+      if (metodo === 'tarjeta') cargarTarjeta(); else quitarTarjeta();
+      textoBoton();
+    }
+    tarjetasPago.forEach(function (c) {
+      c.addEventListener('click', function () {
+        if (metodo === c.getAttribute('data-metodo')) return;
+        metodo = c.getAttribute('data-metodo'); form.elements.pago.value = c.getAttribute('data-pago'); marcar('pago', ''); pintarPagos();
+      });
+    });
 
     // ---- Validación por campo (mensajes junto al campo, en español)
     var reglas = {
@@ -358,6 +459,7 @@
         if (v.length < 4) return 'Revisa tu cédula o pasaporte: es muy corta.';
         return /^[A-Za-z0-9\-\. ]+$/.test(v) ? '' : 'Solo letras, números y guiones.';
       },
+      institucion: function (v) { return v.length < 2 ? 'Escribe tu institución o centro de trabajo.' : ''; },
       pais: function (v) { return v.length < 2 ? 'Indica tu país de residencia.' : ''; },
       correo: function (v) {
         if (!v) return 'Escribe tu correo electrónico.';
@@ -387,6 +489,30 @@
       el.addEventListener('blur', function () { if (el.value.trim() !== '' || el.classList.contains('campo-error')) validar(n); });
       el.addEventListener('input', function () { if (el.classList.contains('campo-error')) validar(n); });
     });
+    function validarComprobante() {
+      var a = inputArchivo.files && inputArchivo.files[0], t = '';
+      if (!a) t = 'Adjunta el comprobante de tu pago.';
+      else if (!/^(image\/(jpeg|png|webp)|application\/pdf)$/.test(a.type)) t = 'Formato no permitido. Usa JPG, PNG, WebP o PDF.';
+      else if (a.size > 10 * 1024 * 1024) t = 'El comprobante no puede superar los 10 MB.';
+      marcar('comprobante', t); return !t;
+    }
+    function validarPago() {
+      if (!metodo) { marcar('pago', 'Elige cómo vas a pagar.'); return false; }
+      var ok = true;
+      if (metodo === 'ach' || metodo === 'yappy') {
+        var ref = form.elements.referencia_pago.value.trim();
+        marcar('referencia_pago', ref ? '' : 'Escribe el número de referencia o confirmación de tu pago.'); ok = !!ref;
+        ok = validarComprobante() && ok;
+      } else if (metodo === 'tarjeta') {
+        marcar('account_token', tokenTarjeta ? '' : 'Valida tu tarjeta antes de enviar.'); ok = !!tokenTarjeta;
+        var okCvv = /^[0-9]{3,4}$/.test(form.elements.cvv.value);
+        if (tokenTarjeta) marcar('cvv', okCvv ? '' : 'Escribe el CVV de tu tarjeta (3 o 4 dígitos).');
+        ok = ok && okCvv;
+      }
+      return ok;
+    }
+    form.elements.referencia_pago.addEventListener('input', function () { if (this.classList.contains('campo-error')) validarPago(); });
+    form.elements.cvv.addEventListener('input', function () { this.value = this.value.replace(/[^0-9]/g, ''); textoBoton(); if (this.classList.contains('campo-error')) validarPago(); });
     var acepta = campoEl('acepta');
     acepta.addEventListener('change', function () { marcar('acepta', acepta.checked ? '' : 'Debes aceptar para poder enviar tu inscripción.'); });
 
@@ -406,25 +532,32 @@
     function enfocarPrimerError() {
       var p = form.querySelector('.campo-error'); if (p) { p.focus(); p.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
     }
-    function enviando(si) { boton.disabled = si; spin.classList.toggle('hidden', !si); txtBoton.textContent = si ? 'Enviando…' : 'Enviar inscripción'; }
+    function enviando(si) { boton.disabled = si; spin.classList.toggle('hidden', !si); txtBoton.textContent = si ? (metodo === 'tarjeta' ? 'Procesando pago…' : 'Enviando…') : TEXTO_BOTON; }
 
     form.addEventListener('submit', function (e) {
       e.preventDefault(); err.classList.add('hidden');
       var ok = Object.keys(reglas).map(validar).every(Boolean);
+      if (!validarPago()) ok = false;
       if (!acepta.checked) { marcar('acepta', 'Debes aceptar para poder enviar tu inscripción.'); ok = false; }
       if (!ok) { enfocarPrimerError(); return; }
 
       var f = new FormData(form), pago = f.get('pago');
-      var cuerpo = {
-        categoria: selCat.value, pago: pago, pais: pais.value.trim(),
-        nombre: f.get('nombre'), apellido: f.get('apellido'), documento: f.get('documento'), correo: f.get('correo'),
-        telefono: f.get('telefono'), institucion: f.get('institucion'), acepta: true, sitio_web: f.get('sitio_web')
-      };
+      var cuerpo = new FormData();
+      [['categoria', selCat.value], ['pago', pago], ['pais', pais.value.trim()], ['nombre', f.get('nombre')], ['apellido', f.get('apellido')],
+       ['documento', f.get('documento')], ['correo', f.get('correo')], ['telefono', f.get('telefono')], ['institucion', f.get('institucion')],
+       ['acepta', 'true'], ['sitio_web', f.get('sitio_web')]].forEach(function (p) { cuerpo.append(p[0], p[1] == null ? '' : p[1]); });
+      if (metodo === 'ach' || metodo === 'yappy') {
+        cuerpo.append('referencia_pago', form.elements.referencia_pago.value.trim());
+        cuerpo.append('comprobante', inputArchivo.files[0]);
+      } else if (metodo === 'tarjeta') {
+        cuerpo.append('account_token', tokenTarjeta); cuerpo.append('cvv', form.elements.cvv.value);
+      }
       enviando(true);
       var ctl = window.AbortController ? new AbortController() : null, tmo = ctl ? setTimeout(function () { ctl.abort(); }, 40000) : null;
-      enviarJson(datos.endpoint, cuerpo, ctl && ctl.signal).then(function (j) {
+      enviarForm(datos.endpoint, cuerpo, ctl && ctl.signal).then(function (j) {
         if (!j.ok) {
-          (j.campos || []).forEach(function (n) { if (reglas[n]) marcar(n, j.error); });
+          (j.campos || []).forEach(function (n) { marcar(n === 'tarjeta' ? 'account_token' : n, j.error); });
+          if ((j.campos || []).indexOf('tarjeta') !== -1 && metodo === 'tarjeta') cargarTarjeta();
           if (!(j.campos || []).length) errorGeneral(j.error || 'No se pudo enviar. Intenta de nuevo.');
           else { errorGeneral(j.error); enfocarPrimerError(); }
           return;
@@ -439,7 +572,8 @@
     var ok = $('#registro-ok');
     function mostrarExito(j) {
       $('#ok-titulo').textContent = j.reenvio ? 'Ya tenías una inscripción' : '¡Recibimos tu solicitud!';
-      $('#ok-saludo').textContent = (j.nombre ? j.nombre + ', t' : 'T') + (j.reenvio ? 'e reenviamos tus datos y las indicaciones de pago.' : 'u cupo se confirma cuando verifiquemos tu pago.');
+      $('#ok-saludo').textContent = (j.nombre ? j.nombre + ', t' : 'T') + (j.reenvio ? 'e reenviamos tus datos y las indicaciones de pago.' : j.pagado ? 'u pago con tarjeta fue aprobado y tu cupo está confirmado.' : 'u cupo se confirma cuando verifiquemos tu pago.');
+      $('#ok-paso').textContent = j.pagado ? 'Tu pago fue aprobado' : 'Siguiente paso: tu pago'; $('#ok-paso2').classList.toggle('hidden', !!j.pagado);
       $('#ok-codigo').textContent = j.codigo; $('#ok-categoria').textContent = j.categoria; $('#ok-precio').textContent = j.precio;
       $('#ok-pago').textContent = j.pago; $('#ok-correo').textContent = j.correo;
       $('#ok-instrucciones').textContent = j.instrucciones || ('Envía tu comprobante, con tu código, a ' + (j.contacto || datos.correo) + '.');
@@ -453,7 +587,7 @@
       else { var r = document.createRange(); r.selectNode($('#ok-codigo')); var s = getSelection(); s.removeAllRanges(); s.addRange(r); try { document.execCommand('copy'); listo(); } catch (x) {} }
     });
     $('#ok-otra').addEventListener('click', function () {
-      form.reset(); pintarPagos(); pintarPrecio(); pintarExtranjero();
+      form.reset(); metodo = ''; form.elements.pago.value = ''; pintarPagos(); pintarPrecio(); pintarExtranjero();
       $$('.campo-error', form).forEach(function (x) { x.classList.remove('campo-error'); x.removeAttribute('aria-invalid'); });
       $$('.campo-msg', form).forEach(function (x) { x.hidden = true; });
       ok.classList.add('hidden'); form.classList.remove('hidden'); campoEl('nombre').focus();

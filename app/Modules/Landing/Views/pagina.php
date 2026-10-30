@@ -17,6 +17,10 @@ $datos = [
     'tarifas'    => $catalogo['tarifas'] ?? ['preventa' => [], 'regular' => []],
     'formas'     => $catalogo['formas'] ?? [],
     'instrucciones' => $catalogo['instrucciones'] ?? [],
+    'comprobante'   => $catalogo['comprobante'] ?? [],
+    'jquery'        => base_url('assets/js/vendor/jquery-3.2.1.min.js'),
+    'banco'         => ['beneficiario' => $c->bancoBeneficiario, 'banco' => $c->bancoNombre, 'cuenta' => $c->bancoCuenta],
+    'croem'         => \Modules\Eventos\Services\CroemPasarela::configurada() ? \Modules\Eventos\Services\CroemPasarela::paraNavegador() : null,
 ];
 ?>
 <!doctype html>

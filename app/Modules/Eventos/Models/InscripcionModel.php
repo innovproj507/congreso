@@ -13,6 +13,6 @@ class InscripcionModel extends Model
     protected $allowedFields = [
         'codigo', 'evento_id', 'tarifa_id', 'persona_id', 'periodo', 'categoria', 'monto_centavos',
         'nombre', 'apellido', 'documento', 'pais', 'correo', 'telefono', 'institucion', 'forma_pago',
-        'estado', 'recibo_folio', 'pagado_en', 'canal', 'acepto_terminos_at', 'ip', 'correo_enviado_at',
+        'estado', 'recibo_folio', 'pagado_en', 'canal', 'acepto_terminos_at', 'ip', 'correo_enviado_at', 'comprobante', 'referencia_pago',
     ];
 }

@@ -1,6 +1,9 @@
 <?php /* Franja «Apoyan:» con los logos de los patrocinadores, en carrusel continuo (se pausa al pasar el cursor). Los logos están en public/img; para sumar otro, añádelo a $aliados. */
 $aliados = [
     ['img/logo-babycastille.webp', 310, 275, 'Baby Castille', null, 'h-[46px] sm:h-[72px]'],
+    ['img/logo-senacyt.webp', 520, 162, 'SENACYT · Secretaría Nacional de Ciencia, Tecnología e Innovación', null, 'h-[34px] sm:h-[52px]'],
+    ['img/logo-copa.webp', 539, 94, 'Fundación Despega · Copa Airlines', null, 'h-[26px] sm:h-[40px]'],
+    ['img/logo-vive.webp', 234, 192, 'Vive · Emergencias y Traslados', null, 'h-[44px] sm:h-[68px]'],
     ['img/logo-mivo.webp', 445, 214, 'MIVO · Mis vacunas online', null, 'h-[46px] sm:h-[72px]'],
     ['img/logo-nicklaus.webp', 378, 203, 'Nicklaus Children’s Hospital Global Health', null, 'h-[46px] sm:h-[72px]'],
     ['img/logo-om-pharma.webp', 307, 221, 'OM Pharma', null, 'h-[46px] sm:h-[72px]'],
@@ -18,9 +21,6 @@ $aliados = [
     ['img/logo-exceltis.webp', 470, 204, 'Exeltis', null, 'h-[40px] sm:h-[62px]'],
     ['img/logo-pediatrics.webp', 239, 225, 'ABC Pediatrics · Clínica de Especialidades Pediátricas', null, 'h-[44px] sm:h-[68px]'],
     ['img/logo-respirator.webp', 498, 149, 'Respirator Care Panamá', null, 'h-[34px] sm:h-[52px]'],
-    ['img/logo-copa.webp', 539, 94, 'Fundación Despega · Copa Airlines', null, 'h-[26px] sm:h-[40px]'],
-    ['img/logo-senacyt.webp', 520, 162, 'SENACYT · Secretaría Nacional de Ciencia, Tecnología e Innovación', null, 'h-[34px] sm:h-[52px]'],
-    ['img/logo-vive.webp', 234, 192, 'Vive · Emergencias y Traslados', null, 'h-[44px] sm:h-[68px]'],
 ]; // [archivo, ancho, alto, nombre, enlace (o null), clase de altura]
 ?>
 <section class="overflow-hidden border-y border-esm-100 bg-white py-10" aria-label="Apoyan">

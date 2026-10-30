@@ -26,8 +26,6 @@ class Congreso2027Seeder extends Seeder
 
         // Tarifario oficial (Early Bird y Regular): ver Database/TarifasOficiales.php
         \Modules\Eventos\Database\TarifasOficiales::aplicar($this->db, (int) $eventoId);
-        foreach (['Yappy', 'Visa', 'Mastercard', 'Clave', 'ACH Banco Nacional'] as $i => $f) {
-            $this->db->table('formas_pago')->insert(['nombre' => $f, 'orden' => $i]);
-        }
+        \Modules\Eventos\Database\FormasDePago::aplicar($this->db);
     }
 }

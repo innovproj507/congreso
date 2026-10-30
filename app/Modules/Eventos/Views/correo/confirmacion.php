@@ -8,19 +8,19 @@
 <div style="font-size:22px;font-weight:bold;margin-top:4px"><?= esc($ev['nombre']) ?></div></td></tr>
 <tr><td style="padding:28px">
 <p style="margin:0 0 12px">Hola <strong><?= esc($ins['nombre']) ?></strong>,</p>
-<p style="margin:0 0 16px;line-height:1.5">Recibimos tu solicitud de inscripción. Tu cupo se confirma cuando verifiquemos tu pago.</p>
+<p style="margin:0 0 16px;line-height:1.5"><?= ! empty($pagado) ? 'Recibimos tu inscripción y tu pago con tarjeta fue aprobado.' : 'Recibimos tu solicitud de inscripción. Tu cupo se confirma cuando verifiquemos tu pago.' ?></p>
 <table width="100%" cellpadding="8" cellspacing="0" style="background:#eef6fc;border-radius:12px;font-size:14px">
 <tr><td>Código de inscripción</td><td align="right"><strong><?= esc($codigo) ?></strong></td></tr>
 <tr><td>Categoría</td><td align="right"><?= esc($ins['categoria']) ?></td></tr>
 <tr><td>Monto</td><td align="right"><strong><?= esc($precio) ?></strong></td></tr>
 <tr><td>Forma de pago elegida</td><td align="right"><?= esc($ins['forma_pago']) ?></td></tr>
 </table>
-<p style="margin:20px 0 8px;font-weight:bold">Siguiente paso: tu pago por <?= esc($ins['forma_pago']) ?></p>
+<p style="margin:20px 0 8px;font-weight:bold"><?= ! empty($pagado) ? 'Tu pago' : 'Siguiente paso: tu pago por ' . esc($ins['forma_pago']) ?></p>
 <?php if (($instrucciones ?? '') !== '') : ?>
 <p style="margin:0;line-height:1.5"><?= nl2br(esc($instrucciones)) ?></p>
 <?php else : ?>
 <p style="margin:0;line-height:1.5">Realiza tu pago y envía el comprobante, junto con tu código, a <a href="mailto:<?= esc($contacto, 'attr') ?>" style="color:#0e6b5c"><?= esc($contacto) ?></a>.</p>
 <?php endif; ?>
-<p style="margin:12px 0 0;line-height:1.5">Con tu comprobante emitiremos tu recibo y confirmaremos tu inscripción. Guarda este correo: tu código es <strong><?= esc($codigo) ?></strong>.</p>
+<p style="margin:12px 0 0;line-height:1.5"><?= empty($pagado) ? 'Con tu comprobante emitiremos tu recibo y confirmaremos tu inscripción. ' : '' ?>Guarda este correo: tu código es <strong><?= esc($codigo) ?></strong>.</p>
 <p style="margin:20px 0 0;font-size:13px;color:#5a6b85"><?= esc($ev['sede']) ?> · 17 al 19 de junio de 2027</p>
 </td></tr></table></td></tr></table></body></html>

@@ -67,3 +67,14 @@
 #--------------------------------------------------------------------
 
 # logger.threshold = 4
+
+#--------------------------------------------------------------------
+# PAGO CON TARJETA (CROEM / Banco Nacional de Panamá)
+#--------------------------------------------------------------------
+# Sin estas credenciales el medio «Tarjeta de crédito» muestra que no está disponible.
+# croem.apiKey =
+# croem.accessCode =
+# croem.merchantAccount =
+# croem.terminal =
+# croem.widgetUrl =
+# croem.endpoint =

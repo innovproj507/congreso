@@ -6,13 +6,13 @@ namespace Modules\Eventos\Services;
 // Si el correo falla, la inscripción ya está guardada; solo se registra en el log.
 class NotificadorInscripcion
 {
-    public function enviar(array $r): bool
+    public function enviar(array $r, ?string $comprobante = null): bool
     {
         $ins = $r['inscripcion'];
         $ev  = $r['evento'];
         $datos = [
             'ins' => $ins, 'ev' => $ev, 'precio' => $r['precio'], 'codigo' => $r['codigo'],
-            'contacto' => $ev['correo_contacto'], 'instrucciones' => $r['instrucciones'] ?? '',
+            'contacto' => $ev['correo_contacto'], 'pagado' => ! empty($r['pagado']), 'instrucciones' => $r['instrucciones'] ?? '',
         ];
 
         try {
@@ -26,6 +26,9 @@ class NotificadorInscripcion
                 $email->setReplyTo($ins['correo']);
                 $email->setSubject('Nueva inscripción ' . $r['codigo'] . ' · ' . $ins['nombre'] . ' ' . $ins['apellido']);
                 $email->setMessage(view('Modules\Eventos\Views\correo\aviso', $datos));
+                if ($comprobante && is_file($comprobante)) {
+                    $email->attach($comprobante);
+                }
                 if (! $email->send(false)) {
                     log_message('error', 'Aviso de inscripción no enviado: ' . strip_tags($email->printDebugger(['headers'])));
 

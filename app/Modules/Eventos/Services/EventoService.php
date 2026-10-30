@@ -84,6 +84,7 @@ class EventoService
             'tarifas'       => $por,
             'formas'        => array_column($formas, 'nombre'),
             'instrucciones' => $instrucciones,
+            'comprobante'   => array_column(array_filter($formas, static fn ($f) => (int) ($f['requiere_comprobante'] ?? 0) === 1), 'nombre'),
         ];
     }
 
@@ -160,6 +161,7 @@ class EventoService
             'telefono'           => $d['telefono'],
             'institucion'        => $d['institucion'] !== '' ? $d['institucion'] : null,
             'forma_pago'         => $d['pago'],
+            'comprobante'        => null,
             'estado'             => 'pendiente',
             'canal'              => 'web',
             'acepto_terminos_at' => date('Y-m-d H:i:s'),
@@ -182,6 +184,24 @@ class EventoService
         }
 
         return ['ok' => true, 'status' => 201, 'codigo' => $codigo, 'precio' => $tarifa['precio'], 'periodo' => $periodo, 'inscripcion' => $fila, 'evento' => $ev, 'instrucciones' => $cat['instrucciones'][$d['pago']] ?? ''];
+    }
+
+    /** Guarda lo que el inscrito aportó para su pago (comprobante y referencia). */
+    public function guardarPago(int $inscripcionId, array $campos): void
+    {
+        $this->inscripciones->update($inscripcionId, $campos);
+    }
+
+    /** Pago con tarjeta aprobado por el banco: la inscripción queda pagada de inmediato. */
+    public function marcarPagadaConTarjeta(int $inscripcionId, string $transaccion): void
+    {
+        $this->inscripciones->update($inscripcionId, ['estado' => 'pagada', 'pagado_en' => date('Y-m-d H:i:s'), 'referencia_pago' => $transaccion]);
+    }
+
+    /** Borra una inscripción recién creada cuyo cobro con tarjeta fue rechazado, para que la persona pueda reintentar. */
+    public function descartar(int $inscripcionId): void
+    {
+        $this->inscripciones->delete($inscripcionId);
     }
 
     public function marcarCorreoEnviado(int $inscripcionId): void
