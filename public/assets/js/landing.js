@@ -329,7 +329,7 @@
     tarifas.forEach(function (t) { var o = document.createElement('option'); o.value = t.categoria; o.textContent = t.categoria + ' — ' + t.precio; selCat.appendChild(o); });
     $('#tarifa-titulo').textContent = titulos[periodo]; $('#tarifa-rango').textContent = rangos[periodo];
     function precio() { var t = tarifas.filter(function (x) { return x.categoria === selCat.value; })[0]; return t ? t.precio : ''; }
-    function pintarPrecio() { $('#tarifa-precio').textContent = precio(); }
+    function pintarPrecio() { const el = $('#tarifa-precio'); if (el) el.textContent = precio(); }
     selCat.addEventListener('change', pintarPrecio); pintarPrecio();
 
     var pais = $('#pais');

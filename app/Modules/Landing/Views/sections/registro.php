@@ -43,10 +43,9 @@ $paises = ['Panamá', 'Argentina', 'Bolivia', 'Brasil', 'Chile', 'Colombia', 'Co
         </div>
 
         <form id="registro-form" novalidate class="rounded-[30px] border border-esm-100 bg-white p-6 shadow-sm sm:p-10">
-            <div class="mb-8 flex flex-wrap items-center justify-between gap-4 rounded-[30px] bg-esm-900 px-6 py-5 text-white">
+            <div class="mb-8 rounded-[30px] bg-esm-900 px-6 py-5 text-center text-white">
                 <p class="text-sm">Tarifa vigente: <strong id="tarifa-titulo" class="font-display text-base"></strong>
                     <span id="tarifa-rango" class="block text-esm-300"></span></p>
-                <p id="tarifa-precio" class="font-display text-4xl font-bold text-gold" aria-live="polite"></p>
             </div>
 
             <div class="grid gap-5 sm:grid-cols-2">
