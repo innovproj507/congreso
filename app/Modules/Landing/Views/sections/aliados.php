@@ -1,18 +1,26 @@
-<?php /* Franja «Apoyan:» con los logos de los patrocinadores, centrados y sin repetir. Los logos están en public/img; para sumar otro, añádelo a $aliados. */
+<?php /* Franja «Apoyan:» con los logos de los patrocinadores, en carrusel continuo (se pausa al pasar el cursor). Los logos están en public/img; para sumar otro, añádelo a $aliados. */
 $aliados = [
-    ['img/logo-babycastille.webp', 326, 291, 'Baby Castille', null, 'h-[72px]'],
-];
+    ['img/logo-babycastille.webp', 310, 275, 'Baby Castille', null, 'h-[46px] sm:h-[72px]'],
+    ['img/logo-mivo.webp', 445, 214, 'MIVO · Mis vacunas online', null, 'h-[46px] sm:h-[72px]'],
+    ['img/logo-nicklaus.webp', 378, 203, 'Nicklaus Children’s Hospital Global Health', null, 'h-[46px] sm:h-[72px]'],
+    ['img/logo-om-pharma.webp', 307, 221, 'OM Pharma', null, 'h-[46px] sm:h-[72px]'],
+    ['img/logo-opella.webp', 590, 175, 'Opella', null, 'h-[36px] sm:h-[56px]'],
+    ['img/logo-raven.webp', 558, 176, 'Raven Productos Farmacéuticos', null, 'h-[38px] sm:h-[60px]'],
+]; // [archivo, ancho, alto, nombre, enlace (o null), clase de altura]
 ?>
-<section class="border-y border-esm-100 bg-white py-10" aria-label="Apoyan">
+<section class="overflow-hidden border-y border-esm-100 bg-white py-10" aria-label="Apoyan">
     <p class="mb-6 text-center text-sm font-semibold uppercase tracking-[0.25em] text-esm-700">Apoyan:</p>
-    <div class="mx-auto flex max-w-[1320px] flex-wrap items-center justify-center gap-6 px-5">
-        <?php foreach ($aliados as [$src, $w, $h, $nombre, $url, $alto]) : ?>
-            <?php $img = '<img src="' . base_url($src) . '" width="' . $w . '" height="' . $h . '" loading="lazy" decoding="async" alt="' . esc($nombre, 'attr') . '" class="' . $alto . ' w-auto object-contain">'; ?>
-            <?php if ($url) : ?>
-                <a href="<?= esc($url, 'attr') ?>" target="_blank" rel="noopener noreferrer" aria-label="<?= esc($nombre, 'attr') ?> (se abre en una pestaña nueva)" class="grid shrink-0 place-items-center rounded-[30px] border border-esm-100 bg-white px-10 py-3"><?= $img ?></a>
-            <?php else : ?>
-                <span class="grid shrink-0 place-items-center rounded-[30px] border border-esm-100 bg-white px-10 py-3"><?= $img ?></span>
-            <?php endif; ?>
-        <?php endforeach; ?>
+    <?php /* Carrusel: la tanda se repite 4 veces (las copias van ocultas a lectores de pantalla) y la animación recorre la mitad de la pista, así el bucle no tiene saltos. */ ?>
+    <div class="carrusel-logos flex w-max">
+        <?php for ($copia = 0; $copia < 4; $copia++) : $oculto = $copia > 0; ?>
+            <?php foreach ($aliados as [$src, $w, $h, $nombre, $url, $alto]) : ?>
+                <?php $img = '<img src="' . base_url($src) . '" width="' . $w . '" height="' . $h . '" loading="lazy" decoding="async" alt="' . ($oculto ? '' : esc($nombre, 'attr')) . '" class="' . $alto . ' w-auto object-contain">'; ?>
+                <?php if ($url) : ?>
+                    <a href="<?= esc($url, 'attr') ?>" target="_blank" rel="noopener noreferrer" <?= $oculto ? 'tabindex="-1" aria-hidden="true"' : 'aria-label="' . esc($nombre, 'attr') . ' (se abre en una pestaña nueva)"' ?> class="mr-4 grid shrink-0 place-items-center rounded-[30px] border border-esm-100 bg-white px-4 py-3 sm:mr-6 sm:px-8"><?= $img ?></a>
+                <?php else : ?>
+                    <span <?= $oculto ? 'aria-hidden="true"' : '' ?> class="mr-4 grid shrink-0 place-items-center rounded-[30px] border border-esm-100 bg-white px-4 py-3 sm:mr-6 sm:px-8"><?= $img ?></span>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        <?php endfor; ?>
     </div>
 </section>
