@@ -104,12 +104,12 @@ $paises = ['Panamá', 'Argentina', 'Bolivia', 'Brasil', 'Chile', 'Colombia', 'Co
                         </label>
                     <?php endforeach; ?>
                 </div>
-                <p id="pago-instrucciones" class="mt-3 hidden rounded-2xl bg-esm-50 px-4 py-3 text-sm leading-6 text-ink/80" aria-live="polite"></p>
             </fieldset>
 
             <label class="mt-8 flex items-start gap-3 text-sm text-ink/75">
                 <input type="checkbox" name="acepta" required aria-describedby="err-acepta" class="mt-1 h-4 w-4 accent-[#0e6b5c]">
-                Confirmo que mis datos son correctos y autorizo a la Sociedad Panameña de Pediatría a contactarme sobre mi inscripción.
+                <span><strong class="block text-esm-900">¡IMPORTANTE! VERIFICA TUS DATOS ANTES DE ENVIAR TU INSCRIPCIÓN.</strong>
+                Asegúrate de que tu correo electrónico y número de celular estén escritos correctamente. Estos datos son fundamentales para recibir el Certificado de Participación al finalizar el Congreso. Cualquier error en esta información podría dificultar su entrega.</span>
             </label>
             <p class="campo-msg" id="err-acepta" hidden></p>
 

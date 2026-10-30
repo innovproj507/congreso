@@ -345,7 +345,7 @@
       var elegido = '';
       radios.forEach(function (r) { r.parentNode.classList.toggle('is-on', r.checked); if (r.checked) elegido = r.value; });
       var t = (datos.instrucciones || {})[elegido] || '';
-      cajaPago.textContent = t; cajaPago.classList.toggle('hidden', !t);
+      if (cajaPago) { cajaPago.textContent = t; cajaPago.classList.toggle('hidden', !t); }
     }
     radios.forEach(function (r) { r.addEventListener('change', pintarPagos); }); pintarPagos();
 
