@@ -23,9 +23,14 @@ final class FormasDePago
     public static function aplicar(\CodeIgniter\Database\BaseConnection $db): void
     {
         $t = $db->table('formas_pago');
+        // La columna la crea una migración posterior: en bases que aún no la tienen se omite (esa migración marca ACH y Yappy)
+        $conComprobante = $db->fieldExists('requiere_comprobante', 'formas_pago');
         $db->table('formas_pago')->update(['activo' => 0]);
         foreach (self::lista() as $i => $f) {
-            $fila = ['nombre' => $f['nombre'], 'instrucciones' => $f['instrucciones'], 'requiere_comprobante' => (int) $f['comprobante'], 'activo' => 1, 'orden' => $i];
+            $fila = ['nombre' => $f['nombre'], 'instrucciones' => $f['instrucciones'], 'activo' => 1, 'orden' => $i];
+            if ($conComprobante) {
+                $fila['requiere_comprobante'] = (int) $f['comprobante'];
+            }
             $existe = $db->table('formas_pago')->where('nombre', $f['nombre'])->get()->getRowArray();
             if ($existe) {
                 $db->table('formas_pago')->where('id', $existe['id'])->update($fila);
