@@ -118,7 +118,7 @@ body {
 @keyframes marquee { to { transform: translateX(-50%); } }
 
 /* Carrusel de patrocinadores: avanza continuo (también con «reducir movimiento», porque es lento y el cliente lo pide) y se pausa al pasar el cursor o al enfocar */
-.carrusel-logos { animation: marquee 40s linear infinite; }
+.carrusel-logos { animation: marquee 80s linear infinite; }
 .carrusel-logos:hover, .carrusel-logos:focus-within { animation-play-state: paused; }
 
 /* Escenario principal de la galería: fundido suave + efecto Ken Burns */
