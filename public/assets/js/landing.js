@@ -319,14 +319,24 @@
     });
   }
 
-  function enviarForm(url, fd, senal) {
+  // Si la página estuvo abierta mucho tiempo el token CSRF vence (403): se pide uno nuevo y se reintenta una vez, sin perder lo escrito
+  function renovarCsrf() {
+    return fetch(location.pathname, { credentials: 'same-origin', cache: 'no-store' }).then(function (r) { return r.text(); }).then(function (h) {
+      var m = h.match(/name="csrf-token" content="([^"]+)"/); if (m) csrf = m[1]; return !!m;
+    }).catch(function () { return false; });
+  }
+  function leerRespuesta(res) {
+    return res.json().catch(function () { return { ok: false, error: 'La sesión expiró. Recarga la página e inténtalo de nuevo.' }; })
+      .then(function (j) { if (j && j.csrf) csrf = j.csrf; j.status = res.status; return j; });
+  }
+  function enviarForm(url, fd, senal, reintento) {
     return fetch(url, {
       method: 'POST',
       headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrf, 'X-Requested-With': 'XMLHttpRequest' },
       body: fd, credentials: 'same-origin', signal: senal || undefined
     }).then(function (res) {
-      return res.json().catch(function () { return { ok: false, error: 'La sesión expiró. Recarga la página e inténtalo de nuevo.' }; })
-        .then(function (j) { if (j && j.csrf) csrf = j.csrf; j.status = res.status; return j; });
+      if (res.status !== 403 || reintento) return leerRespuesta(res);
+      return renovarCsrf().then(function (ok) { return ok ? enviarForm(url, fd, senal, true) : leerRespuesta(res); });
     });
   }
 
