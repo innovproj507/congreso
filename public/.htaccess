@@ -6,9 +6,9 @@ Options -Indexes
 # ----------------------------------------------------------------------
 
 # Turning on the rewrite engine is necessary for the following rules and features.
-# FollowSymLinks must be enabled for this to work.
+# FollowSymLinks must be enabled for this to work (Apache/Plesk ya lo traen activo; si se pide aquí con
+# «Options +FollowSymlinks» Plesk responde 500: «Option FollowSymlinks not allowed here»).
 <IfModule mod_rewrite.c>
-	Options +FollowSymlinks
 	RewriteEngine On
 
 	# If you installed CodeIgniter in a subfolder, you will need to
